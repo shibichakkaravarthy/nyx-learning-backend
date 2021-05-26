@@ -22,9 +22,10 @@ exports.enroll = async (req, res, next) => {
 
 exports.getAllCourses = async (req, res, next) => {
     try {
-        const courses = await Course.find({}).limit(20);
-        res.status(200).json({status: "SUCCESS", result: course})
+        const courses = await Course.find({});
+        res.status(200).json({status: "SUCCESS", result: courses})
     } catch (error) {
+        console.log("STUDENT GET ALL COURSES ERROR", error)
         res.status(500).json({status: "ERROR", message: "Something went wrong!"})
     }
 }
