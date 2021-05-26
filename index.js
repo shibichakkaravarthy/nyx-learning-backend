@@ -24,12 +24,12 @@ db.once("open", () => {
 
 app.use('/auth', AuthRoutes);
 
-app.use('/', (req, res) => {
+app.use('/protected', ProtectedRouter);
+
+app.get('/', (req, res) => {
     res.send("APP WORKING");
 })
 
-app.use('/protected', ProtectedRouter);
-
-app.listen(process.env.PORT || 3000, () => {
-    console.log("APP RUNNING IN PORT "+ process.env.port || 3000)
+app.listen(process.env.PORT || 5000, () => {
+    console.log("APP RUNNING IN PORT "+ process.env.port || "5000")
 })
