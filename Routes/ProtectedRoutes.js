@@ -6,6 +6,8 @@ const jwt = require('jsonwebtoken');
 ProtectedRouter.use((req, res, next) => {
 	console.log("STARTED CHECKING JWT", req.headers.authorization.split(" "));
 	try {
+		if(!req.headers.authorization)
+		throw {code: 401, message: "TOKEN NOT FOUND"}
 		const bearer = req.headers.authorization;
         const token = bearer.slice(7);
 		console.log("Token Started", bearer.split(' '));
