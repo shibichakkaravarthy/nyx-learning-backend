@@ -54,3 +54,32 @@ exports.login = async (req, res, next) => {
         }
     }
 }
+
+exports.refreshToken = async (req, res, next) => {
+    console.log("STARTED CHECKING JWT REFDRESH", req.headers.authorization.split(" "));
+	try {
+		const bearer = req.headers.authorization;
+        const token = bearer.slice(7);
+		const isValid = jwt.verify(token, "PRIVATE_KEY");
+
+		if (isValid.accountId) {
+            const account = await Account.findById(isValid.accountId);
+            console.log("ACCOUNT", account, isValid);
+            if(account) {
+                const accessToken = jwt.sign({accountId: account._id, role: account.role}, "PRIVATE_KEY", { algorithm: "HS256", expiresIn: "15m" })
+                res.status(200).json({status:"SUCCESS", result: {accessToken}})
+            }
+            else {
+                throw {code: 401, message: "INVALID ACCOUNT"}
+            }
+		}
+        else {
+            throw {code: 401, message: "INVALID TOKEN"}
+        }
+	} catch (error) {
+		console.log("FAILRD AUTH REQUEST", error)
+		res
+			.status(401)
+			.json({ status: "ERROR", message: "Invalid token" });
+	}
+}
