@@ -27,6 +27,6 @@ app.use('/', (req, res) => {
     res.send("APP WORKING");
 })
 
-app.listen(3000, () => {
-    console.log("APP RUNNING IN PORT 3000")
+app.listen(process.env.PORT || 3000, () => {
+    console.log("APP RUNNING IN PORT "+ process.env.port || 3000)
 })
