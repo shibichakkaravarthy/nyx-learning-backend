@@ -35,8 +35,8 @@ exports.login = async (req, res, next) => {
             throw {code: 403}
         }
 
-        const refreshToken = jwt.sign({emailId, role: account.role}, "PRIVATE_KEY", { algorithm: "HS256", expiresIn: "14d" })
-        const accessToken = jwt.sign({emailId, accountId: account._id}, "PRIVATE_KEY", { algorithm: "HS256", expiresIn: "15m" })
+        const refreshToken = jwt.sign({emailId, accountId: account._id}, "PRIVATE_KEY", { algorithm: "HS256", expiresIn: "14d" })
+        const accessToken = jwt.sign({accountId: account._id, role: account.role}, "PRIVATE_KEY", { algorithm: "HS256", expiresIn: "15m" })
         const updatedAccount = await Account.findByIdAndUpdate({_id: account._id}, {refreshToken})
         const {hash, ...sharableDetails} = updatedAccount._doc
         res.status(200).json({status: "SUCCESS", result: {...sharableDetails, accessToken}})

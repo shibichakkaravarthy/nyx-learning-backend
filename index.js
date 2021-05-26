@@ -5,6 +5,7 @@ const env = require("dotenv");
 
 const AuthRoutes = require('./Routes/AuthRoutes');
 const bodyParser = require("body-parser");
+const ProtectedRouter = require("./Routes/ProtectedRoutes");
 
 const app = express();
 app.use(cors())
@@ -22,6 +23,8 @@ db.once("open", () => {
 });
 
 app.use('/auth', AuthRoutes);
+
+app.use(ProtectedRouter);
 
 app.use('/', (req, res) => {
     res.send("APP WORKING");

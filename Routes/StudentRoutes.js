@@ -1,26 +1,10 @@
-const jwt = require("jsonwebtoken");
+const StudentRouter = require("express").Router();
+const StudentController = require("../Controllers/StudentController");
 
-const ProtectedRouter = require("express").Router();
+StudentRouter.get('/enrolledCourses', StudentController.getEnrolledCourses);
 
-ProtectedRouter.use((req, res, next) => {
-	console.log("STARTED CHECKING JWT");
-	try {
-		const token = req.headers.authorization.split(" ")[1];
-		console.log("Token Started", token);
-		const isValid = jwt.verify(token, process.env.JWT_SECRET_KEY);
+StudentRouter.get('/allCourses', StudentController.getAllCourses);
 
-		if (isValid.accountId && isValid.role === 'STUDENT') {
-			next();
-		}
-        else {
-            throw new Error({CODE: 401, MESSAGE: "INVALID TOKEN"})
-        }
-	} catch (error) {
-		console.log("FAILRD AUTH REQUEST", req.headers.authorization)
-		res
-			.status(401)
-			.json({ status: "ERROR", result: { message: "Invalid token" } });
-	}
-});
+StudentRouter.patch('/enroll', StudentController.enroll);
 
-module.exports = ProtectedRouter;
+module.exports = StudentRouter;

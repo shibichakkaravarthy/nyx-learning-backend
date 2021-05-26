@@ -1,26 +1,9 @@
 const jwt = require("jsonwebtoken");
+const FacultyController = require('../Controllers/FacultyController');
 
-const ProtectedRouter = require("express").Router();
+const FacultyRouter = require("express").Router();
 
-ProtectedRouter.use((req, res, next) => {
-	console.log("STARTED CHECKING JWT");
-	try {
-		const token = req.headers.authorization.split(" ")[1];
-		console.log("Token Started", token);
-		const isValid = jwt.verify(token, process.env.JWT_SECRET_KEY);
+FacultyRouter.get('/courses', FacultyController.getCourses)
+FacultyRouter.post('/courses/create', FacultyController.createCourse);
 
-		if (isValid.accountId && isValid.role === 'FACULTY') {
-			next();
-		}
-        else {
-            throw new Error({CODE: 401, MESSAGE: "INVALID TOKEN"})
-        }
-	} catch (error) {
-		console.log("FAILRD AUTH REQUEST", req.headers.authorization)
-		res
-			.status(401)
-			.json({ status: "ERROR", result: { message: "Invalid token" } });
-	}
-});
-
-module.exports = ProtectedRouter;
+module.exports = FacultyRouter;
