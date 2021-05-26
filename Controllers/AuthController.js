@@ -56,10 +56,9 @@ exports.login = async (req, res, next) => {
 }
 
 exports.refreshToken = async (req, res, next) => {
-    console.log("STARTED CHECKING JWT REFDRESH", req.headers.authorization.split(" "));
+    console.log("STARTED CHECKING JWT REFDRESH", req.headers.authorization);
 	try {
-		const bearer = req.headers.authorization;
-        const token = bearer.slice(7);
+        const token = req.headers.authorization;
 		const isValid = jwt.verify(token, "PRIVATE_KEY");
 
 		if (isValid.accountId) {
