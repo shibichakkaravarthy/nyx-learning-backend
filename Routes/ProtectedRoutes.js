@@ -1,17 +1,20 @@
 const ProtectedRouter = require('express').Router()
 const FacultyRouter = require('./FacultyRoutes')
 const StudentRouter = require('./StudentRoutes')
+const ProfileRouter = require('./ProfileRoutes')
 const jwt = require('jsonwebtoken');
 
 ProtectedRouter.use((req, res, next) => {
-	console.log("STARTED CHECKING JWT", req.headers.authorization.split(" "));
+	console.log("STARTED CHECKING JWT", req.headers);
 	try {
-		if(!req.headers.authorization)
-		throw {code: 401, message: "TOKEN NOT FOUND"}
+		if(!req.headers.authorization) {
+			throw {code: 401, message: "TOKEN NOT FOUND"}
+		}
 		const bearer = req.headers.authorization;
         const token = bearer.slice(7);
-		console.log("Token Started", bearer.split(' '));
+		console.log("Token Started", token);
 		const isValid = jwt.verify(token, "PRIVATE_KEY");
+		console.log("Token Started", isValid);
 
 		if (isValid.accountId) {
             res.locals.account = {...isValid}
@@ -30,5 +33,6 @@ ProtectedRouter.use((req, res, next) => {
 
 ProtectedRouter.use('/faculty', FacultyRouter)
 ProtectedRouter.use('/student', StudentRouter)
+ProtectedRouter.use('/profile', ProfileRouter)
 
 module.exports = ProtectedRouter;

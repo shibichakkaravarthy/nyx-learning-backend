@@ -10,7 +10,7 @@ const ProfileSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    mobile: {
+    phone: {
         type: String,
         required: true
     },
@@ -34,8 +34,8 @@ const ProfileSchema = new mongoose.Schema({
         type: Array,
         required: true
     },
-    school: String,
-    company: String,
+    alterEmail: String,
+    institution: String,
     hometown: String,
     profileImg: String,
 
