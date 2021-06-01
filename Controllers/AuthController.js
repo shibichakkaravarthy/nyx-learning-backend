@@ -8,7 +8,7 @@ exports.createAccount = async (req, res, next) => {
         const refreshToken = jwt.sign({emailId, role}, "PRIVATE_KEY", { algorithm: "HS256", expiresIn: "14d" })
         const hashedPassword = bcrypt.hashSync(password, 16);
         const newAccount = await Account.create({...req.body, refreshToken, hash: hashedPassword})
-        const accessToken = jwt.sign({emailId, accountId: newAccount._id}, "PRIVATE_KEY", { algorithm: "HS256", expiresIn: "15m" })
+        const accessToken = jwt.sign({emailId, accountId: newAccount._id, role: newAccount.role}, "PRIVATE_KEY", { algorithm: "HS256", expiresIn: "15m" })
         const {hash, ...sharableDetails} = newAccount._doc
         res.status(201).json({status: "SUCCESS", result: {...sharableDetails, accessToken}})
     } catch (error) {
